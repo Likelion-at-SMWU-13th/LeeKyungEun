@@ -1,14 +1,16 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="mypage.css">
+    <link rel="stylesheet" href="{% static 'css/mypage.css' %}">
     <title>마이페이지</title>
 </head>
 <body>
     <div id="mypage">
-        <img id="profileImg" src="./images/프로필사진.png"><br>
+        <img id="profileImg" src="{% static 'images/프로필사진.png' %}"><br>
         <div id="userInfo">
             <section id="nickname" class="info">
                 <b>닉네임</b>
@@ -62,6 +64,15 @@
             </section>
         </div>
     </div>
-    <script src="mypage.js"></script>
+    <script src="{% static 'js/mypage.js' %}"></script>
+    <script>
+        const img = document.getElementById("profileImg");
+        img.addEventListener("mouseover", function() {
+            img.src = "{% static 'images/프로필사진2.png' %}";
+        })
+        img.addEventListener("mouseout", function() {
+            img.src = "{% static 'images/프로필사진.png' %}"
+        })
+    </script>
 </body>
 </html>

@@ -18,11 +18,3 @@ function modifyPassword() {
     }
 }
 
-const img = document.getElementById("profileImg");
-img.addEventListener("mouseover", function() {
-    img.src = "./images/프로필사진2.png";
-})
-img.addEventListener("mouseout", function() {
-    img.src = "./images/프로필사진.png"
-})
-

@@ -32,3 +32,8 @@ def logout(request):
     if request.user.is_authenticated:
         auth_logout(request)
         return redirect("login")
+    
+def mypage(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    return render(request, "mypage.html")
