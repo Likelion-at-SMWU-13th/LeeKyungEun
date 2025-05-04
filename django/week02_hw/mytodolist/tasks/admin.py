@@ -2,4 +2,8 @@ from django.contrib import admin
 from .models import Task
 
 # Register your models here.
-admin.site.register(Task)
+@admin.register(Task)
+class PostModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'content', 'is_completed', 'start_at', 'end_at']
+    list_editable = ['is_completed']
+    list_filter = ['end_at']
