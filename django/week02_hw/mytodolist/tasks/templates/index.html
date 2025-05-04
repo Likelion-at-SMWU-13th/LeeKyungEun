@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>할 일 추가</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label>할일:</label>
+        <input type="text" name="content"><br><br>
+
+        <label>시작일:</label>
+        <input type="date" name="start_at"><br><br>
+
+        <label>마감일:</label>
+        <input type="date" name="end_at"><br><br>
+
+        <input type="submit" value="추가하기">
+    </form>
+</body>
+</html>
