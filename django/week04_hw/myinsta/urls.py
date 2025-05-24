@@ -24,4 +24,5 @@ urlpatterns = [
     path('posts/', include('posts.urls', namespace='posts')),
     path('calculater/query', calculator_query),
     path('calculater/body', calculator_body),
+    path('users/', include('users.urls', namespace='users')),
 ]
