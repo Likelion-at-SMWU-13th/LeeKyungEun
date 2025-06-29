@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 
 from .models import Post
-from .serializers import PostModelSerializer, PostListSerializer
+from .serializers import PostModelSerializer, PostListSerializer, PostRetrieveSerializer
 from rest_framework import generics
 
 # Create your views here.
@@ -13,3 +13,7 @@ class PostModelViewSet(ModelViewSet):
 class PostListView(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostListSerializer
+
+class PostRetrieveView(generics.RetrieveAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostRetrieveSerializer
