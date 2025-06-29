@@ -10,7 +10,7 @@ class PostModelViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostListSerializer
 
-class PostListView(generics.ListAPIView):
+class PostListView(generics.ListAPIView, generics.CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostListSerializer
 
