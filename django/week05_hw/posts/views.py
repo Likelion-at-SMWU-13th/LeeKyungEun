@@ -4,8 +4,11 @@ from rest_framework.viewsets import ModelViewSet
 from .models import Post
 from .serializers import PostModelSerializer, PostListSerializer, PostRetrieveSerializer, CommentListModelSerializer, CommentCreateModelSerializer
 from rest_framework import generics
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
+from django.contrib.auth import authenticate
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 
 # Create your views here.
 class PostModelViewSet(ModelViewSet):
@@ -32,6 +35,22 @@ class PostModelViewSet(ModelViewSet):
         else:
             return Response(serializer.errors, status=400)
         
+    def get_permissions(self):  #메서드에 따른 권한
+        action = self.action
+        if action == 'list':
+            permission_classes = [AllowAny]
+        elif action == 'create':
+            permission_classes = [IsAuthenticated]
+        elif action == 'retrieve':
+            permission_classes = [IsAuthenticated]
+        elif action == 'update':
+            permission_classes = [IsAdminUser]
+        elif action == 'partial_update':
+            permission_classes = [IsAdminUser]
+        elif action == 'destroy':
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
+        
 
 class PostListView(generics.ListAPIView, generics.CreateAPIView):
     queryset = Post.objects.all()
@@ -40,3 +59,18 @@ class PostListView(generics.ListAPIView, generics.CreateAPIView):
 class PostRetrieveView(generics.RetrieveAPIView, generics.UpdateAPIView, generics.DestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostRetrieveSerializer
+
+@api_view(['POST'])
+def login_view(request):
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    user = authenticate(request,
+                        username = username,
+                        password = password)
+    
+    if user : 
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key})
+    
+    else:
+        return Response(status=401)
