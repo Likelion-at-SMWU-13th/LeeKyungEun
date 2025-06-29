@@ -23,3 +23,8 @@ class CommentListModelSerializer(ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
+
+class CommentCreateModelSerializer(ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
