@@ -11,7 +11,7 @@ router_post.register('', PostModelViewSet)
 
 urlpatterns = [
     path('', include(router_post.urls)),
-    path('', PostListView.as_view()),
-    path('<int:pk>', PostRetrieveView.as_view()),
+    #path('', PostListView.as_view()),
+    #path('<int:pk>', PostRetrieveView.as_view()),
     path('admin/', admin.site.urls)
 ]
