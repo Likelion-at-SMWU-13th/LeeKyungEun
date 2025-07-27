@@ -41,10 +41,11 @@ public class ProjectConfig {
     }
 
     @Bean
-    public Person person() {
+    public Person person(Lion lion) {
         Person p = new Person();
         p.setName("lee");
-        p.setLion(lion());
+        //p.setLion(lion());
+        p.setLion(lion);
         return p;
     }
 }
