@@ -4,6 +4,8 @@ package org.example;
 import org.example.bean.Lion;
 import org.example.bean.Person;
 import org.example.config.ProjectConfig;
+import org.example.model.Comment;
+import org.example.service.CommentService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.function.Supplier;
@@ -46,9 +48,17 @@ public class Main {
 //        System.out.println("Lion's name: " + lion.getName());
 //        System.out.println("Person's lion: " + person.getLion());
 
-        Person person = context.getBean(Person.class);
+        // @Autowired로 빈 작성
+//        Person person = context.getBean(Person.class);
+//
+//        System.out.println("Person's name: " + person.getName());
+//        System.out.println("Person's lion: " + person.getLion());
 
-        System.out.println("Person's name: " + person.getName());
-        System.out.println("Person's lion: " + person.getLion());
+        Comment comment = new Comment();
+        comment.setAuthor("babylion");
+        comment.setText("I'm hungry");
+
+        var commentService = context.getBean(CommentService.class);
+        commentService.publishComment(comment);
     }
 }
