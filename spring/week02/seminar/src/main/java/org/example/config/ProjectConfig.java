@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-//@ComponentScan(basePackages = "org.example")
+@ComponentScan(basePackages = {"org.example"})
 public class ProjectConfig {
 
 //    @Bean
@@ -42,10 +42,10 @@ public class ProjectConfig {
 
     @Bean
     public Person person(Lion lion) {
-        Person p = new Person();
+        Person p = new Person(lion);
         p.setName("lee");
         //p.setLion(lion());
-        p.setLion(lion);
+        //p.setLion(lion);
         return p;
     }
 }
