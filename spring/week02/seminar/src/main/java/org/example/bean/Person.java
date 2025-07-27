@@ -1,11 +1,9 @@
 package org.example.bean;
 
-import org.springframework.stereotype.Component;
-
-@Component
-public class Lion {
+public class Person {
 
     private String name;
+    private Lion lion;
 
     public String getName() {
         return name;
@@ -15,8 +13,13 @@ public class Lion {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return "Lion : " + name;
+    public Lion getLion() {
+        return lion;
     }
+
+    public void setLion(Lion lion) {
+        this.lion = lion;
+    }
+
+
 }

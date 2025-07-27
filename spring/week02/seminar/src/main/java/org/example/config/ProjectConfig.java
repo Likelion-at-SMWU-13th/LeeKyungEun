@@ -1,6 +1,7 @@
 package org.example.config;
 
 import org.example.bean.Lion;
+import org.example.bean.Person;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -32,5 +33,18 @@ public class ProjectConfig {
 //    Integer one() {
 //        return 1;
 //    }
+    @Bean
+    public Lion lion() {
+        Lion lion = new Lion();
+        lion.setName("babylion");
+        return lion;
+    }
 
+    @Bean
+    public Person person() {
+        Person p = new Person();
+        p.setName("lee");
+        p.setLion(lion());
+        return p;
+    }
 }

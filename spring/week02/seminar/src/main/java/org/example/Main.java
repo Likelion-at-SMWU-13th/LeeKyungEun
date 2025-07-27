@@ -2,6 +2,7 @@ package org.example;
 
 
 import org.example.bean.Lion;
+import org.example.bean.Person;
 import org.example.config.ProjectConfig;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -24,14 +25,21 @@ public class Main {
 //        System.out.println(lion);
 //        System.out.println(lion.getName());
 
-        Lion lion = new Lion();
-        lion.setName("ribbon");
+//        Lion lion = new Lion();
+//        lion.setName("ribbon");
+//
+//        Supplier<Lion> lionSupplier = () -> lion;
+//
+//        context.registerBean("lion", Lion.class, lionSupplier);
+//
+//        Lion l = context.getBean(Lion.class);
+//        System.out.println(l.getName());
 
-        Supplier<Lion> lionSupplier = () -> lion;
+        Lion lion = context.getBean(Lion.class);
+        Person person = context.getBean(Person.class);
 
-        context.registerBean("lion", Lion.class, lionSupplier);
-
-        Lion l = context.getBean(Lion.class);
-        System.out.println(l.getName());
+        System.out.println("Person's name: " + person.getName());
+        System.out.println("Lion's name: " + lion.getName());
+        System.out.println("Person's lion: " + person.getLion());
     }
 }
