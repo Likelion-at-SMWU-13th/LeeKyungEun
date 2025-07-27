@@ -2,7 +2,7 @@ package org.example.bean;
 
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class Lion {
 
     private String name;

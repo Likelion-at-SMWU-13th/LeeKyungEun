@@ -5,6 +5,8 @@ import org.example.bean.Lion;
 import org.example.config.ProjectConfig;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.util.function.Supplier;
+
 public class Main {
     public static void main(String[] args) {
         var context = new AnnotationConfigApplicationContext(ProjectConfig.class);
@@ -18,8 +20,18 @@ public class Main {
 //        Integer n = context.getBean(Integer.class);
 //        System.out.println(n);
 
-        Lion lion = context.getBean(Lion.class);
-        System.out.println(lion);
-        System.out.println(lion.getName());
+//        Lion lion = context.getBean(Lion.class);
+//        System.out.println(lion);
+//        System.out.println(lion.getName());
+
+        Lion lion = new Lion();
+        lion.setName("ribbon");
+
+        Supplier<Lion> lionSupplier = () -> lion;
+
+        context.registerBean("lion", Lion.class, lionSupplier);
+
+        Lion l = context.getBean(Lion.class);
+        System.out.println(l.getName());
     }
 }
