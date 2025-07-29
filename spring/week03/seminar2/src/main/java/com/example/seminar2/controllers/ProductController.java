@@ -2,12 +2,11 @@ package com.example.seminar2.controllers;
 
 import com.example.seminar2.model.Product;
 import com.example.seminar2.service.ProductService;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+@Controller
 public class ProductController {
 
     private final ProductService productService;
@@ -16,7 +15,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @RequestMapping("/products")
+    @GetMapping("/products")
     public String viewProducts(Model model) {
         var products = productService.findAll();
         model.addAttribute("products", products);
@@ -24,7 +23,7 @@ public class ProductController {
         return "products.html";
     }
 
-    @RequestMapping(path="/products", method = RequestMethod.POST)
+    @PostMapping(path="/products")
     public String addProduct(
             @RequestParam String name,
             @RequestParam double price,
