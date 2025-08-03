@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<h1>📚 Book List</h1>
+<hr>
+<h2>➕ Add a book</h2>
+<form action="/books" method="post">
+    Title : <input type="text" name="title"><br/>
+    Author : <input type="text" name="author"><br/>
+    Price : <input type="number" step="any" name="price"><br/>
+    <button type="submit">Add book</button>
+</form><br/>
+
+<h2>🗒️ View Books</h2>
+<table style="border:1px solid black;">
+    <tr>
+        <th style="border: 1px solid black; background-color: lightgray; padding:5px;">TITLE</th>
+        <th style="border: 1px solid black; background-color: lightgray; padding:5px;">AUTHOR</th>
+        <th style="border: 1px solid black; background-color: lightgray; padding:5px;">PRICE</th>
+    </tr>
+    <tr th:each="b: ${books}">
+        <td style="border: 1px solid black; padding:5px;" th:text="${b.title}"></td>
+        <td style="border: 1px solid black; padding:5px;" th:text="${b.author}"></td>
+        <td style="border: 1px solid black; padding:5px;" th:text="${b.price}"></td>
+    </tr>
+</table>
+
+</body>
+</html>
