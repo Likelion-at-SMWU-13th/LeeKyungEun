@@ -24,7 +24,7 @@ public class BookService {
 
     public List<Book> getBooks() {
         if (books.isEmpty()) {
-            throw new BookNotFoundException("책 목록을 찾지 못했습니다.");
+            throw new BookNotFoundException("책 목록을 조회하지 못했습니다.");
         }
         return books;
     }
