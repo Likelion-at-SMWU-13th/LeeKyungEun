@@ -1,6 +1,9 @@
 package com.example.hw.controller;
 
+import com.example.hw.exception.BookNotFoundException;
+import com.example.hw.exception.DuplicateBookException;
 import com.example.hw.service.BookService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +12,7 @@ import com.example.hw.model.Book;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/books")
 public class BookController {
 
@@ -20,21 +23,20 @@ public class BookController {
     }
 
     @GetMapping
-    public String getBookList(Model model) {
-        var books = bookService.getBooks();
-        model.addAttribute("books", books);
-
-        return "books.html";
+    public ResponseEntity<List<Book>> getBookList() {
+        List<Book> books = bookService.getBooks();
+        return ResponseEntity
+                .status(200)
+                .body(books);
     }
 
     @PostMapping
-    public String addBook(Book book, Model model) {
+    public ResponseEntity<List<Book>> addBook(Book book, Model model) {
 
         bookService.addBook(book);
-
-        var books = bookService.getBooks();
-        model.addAttribute("books", books);
-
-        return "books.html";
+        List<Book> books = bookService.getBooks();
+        return ResponseEntity
+                .status(201)
+                .body(books);
     }
 }
