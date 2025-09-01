@@ -1,6 +1,7 @@
 package com.example.seminar.dao;
 
 import com.example.seminar.dto.PostDto;
+import com.example.seminar.entity.BoardEntity;
 import com.example.seminar.entity.PostEntity;
 import com.example.seminar.repository.PostRepository;
 import org.slf4j.Logger;
@@ -11,15 +12,18 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public class PostDao {
     private static final Logger logger = LoggerFactory.getLogger(PostDao.class);
     private final PostRepository postRepository;
+    private final BoardDao boardDao;
 
-    public PostDao(@Autowired PostRepository postRepository) {
+    public PostDao(@Autowired PostRepository postRepository, BoardDao boardDao) {
         this.postRepository = postRepository;
+        this.boardDao = boardDao;
     }
 
     public void createPost(PostDto dto){
@@ -27,7 +31,7 @@ public class PostDao {
         postEntity.setTitle(dto.getTitle());
         postEntity.setContent(dto.getContent());
         postEntity.setWriter(dto.getWriter());
-        postEntity.setBoardEntity(null);
+        postEntity.setBoardEntity(boardDao.getBoard(dto.getBoardId()));
 
         this.postRepository.save(postEntity);
     }
@@ -69,4 +73,17 @@ public class PostDao {
         }
         this.postRepository.delete(targetEntity.get());
     }
+
+    public int getPostCountByBoardEntity(BoardEntity boardEntity){
+        return postRepository.countByBoardEntity(boardEntity);
+    }
+
+    public Iterator<PostEntity> getPostsByBoardEntity(BoardEntity boardEntity){
+        Optional<List<PostEntity>> targetList = postRepository.findByBoardEntity(boardEntity);
+        if(targetList.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return targetList.get().iterator();
+    }
+
 }
