@@ -1,20 +1,23 @@
 package com.example.seminar.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Product {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "product")
+public class Product extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long number;
 
     @Column(nullable = false)
     private String name;
@@ -27,11 +30,26 @@ public class Product {
 
     @OneToOne(mappedBy = "product")
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private ProductDetail productDetail;
 
     @ManyToOne
     @JoinColumn(name = "provider_id")
     @ToString.Exclude
     private Provider provider;
+
+    @ManyToMany
+    @ToString.Exclude
+    private List<Producer> producers = new ArrayList<>();
+
+    public void addProducer(Producer producer){
+        this.producers.add(producer);
+    }
+
+    public Product(String name, Integer price, Integer stock) {
+        this.name = name;
+        this.price = price;
+        this.stock = stock;
+    }
 
 }
