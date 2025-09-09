@@ -10,19 +10,22 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-@Table(name="provider")
-public class Provider extends BaseEntity {
+@ToString
+@EqualsAndHashCode
+@Table(name = "category")
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
+    private String code;
+
     private String name;
 
-    @OneToMany(mappedBy = "provider", fetch = FetchType.EAGER)
-    @ToString.Exclude
-    private List<Product> productList = new ArrayList<>();
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
+    private List<Product> products = new ArrayList<>();
 
 }
