@@ -8,8 +8,11 @@ public enum HttpStatus {
     FORBIDDEN(403, "Forbidden"),
     NOT_FOUND(404, "Not Found"),
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
-    SERVICE_UNAVAILABLE(503, "Service Unavailable");
+    SERVICE_UNAVAILABLE(503, "Service Unavailable"),
     // 추가로 커스텀 에러도 작성 가능 ex. INVALID_TOKEN
+    USERNAME_DUPLICATED(409, "Username Already Exists"),
+    INVALID_EMAIL_DOMAIN(400, "Invalid Email Domain"),
+    PASSWORD_CONFIRM_MISMATCH(400, "Password Confirm Mismatch");
 
     private final int code;
     private final String message;
