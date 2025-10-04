@@ -1,9 +1,8 @@
 package com.example.seminar.config;
 
-import com.example.seminar.entity.User;
 import com.example.seminar.filter.LoginFilter;
+import com.example.seminar.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +25,7 @@ public class SecurityConfig {
     }
 
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final JWTUtil jwtUtil;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -37,10 +37,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf(csrf -> csrf.ignoringRequestMatchers(PathRequest.toH2Console()))
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
                 .headers(h -> h.frameOptions(f -> f.sameOrigin()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(PathRequest.toH2Console()).permitAll());
+                        .requestMatchers("/h2-console/**").permitAll());
 
         // CSRF 방어 비활성화
         http.csrf(auth -> auth.disable());
@@ -55,7 +55,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated());
         // 커스텀 로그인 필터 등록
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
         // 서버가 세션을 사용하지 않도록 STATELESS 설정
         http
                 .sessionManagement(session -> session
