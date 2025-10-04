@@ -1,12 +1,14 @@
 package com.example.seminar.filter;
 
 import com.example.seminar.dto.CustomUserDetails;
+import com.example.seminar.util.CookieUtil;
 import com.example.seminar.util.JWTUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -52,8 +54,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = grantedAuthority.getAuthority();
 
-        String token = jwtUtil.createJwt(username, role, 60*10*1000L);
-        response.addHeader("Authorization", "Bearer " + token);
+
+        String access = jwtUtil.createJwt("access", username, role, 60*10*1000L);
+        String refresh = jwtUtil.createJwt("refresh", username, role, 24*60*60*1000L);
+
+        response.setHeader("access", access);
+        response.addCookie(CookieUtil.createCookie("refresh", refresh));
+        response.setStatus(HttpStatus.OK.value());
     }
 
     // 로그인 실패 시 401
