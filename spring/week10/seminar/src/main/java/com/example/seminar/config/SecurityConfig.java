@@ -2,6 +2,7 @@ package com.example.seminar.config;
 
 import com.example.seminar.filter.JWTFilter;
 import com.example.seminar.filter.LoginFilter;
+import com.example.seminar.repository.RefreshRepository;
 import com.example.seminar.util.JWTUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
+    private final RefreshRepository refreshRepository;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -85,7 +87,7 @@ public class SecurityConfig {
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
         // 커스텀 로그인 필터 등록
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class);
         // 서버가 세션을 사용하지 않도록 STATELESS 설정
         http
                 .sessionManagement(session -> session
