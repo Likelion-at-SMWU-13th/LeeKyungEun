@@ -1,5 +1,6 @@
 package com.example.seminar.config;
 
+import com.example.seminar.filter.CustomLogoutFilter;
 import com.example.seminar.filter.JWTFilter;
 import com.example.seminar.filter.LoginFilter;
 import com.example.seminar.repository.RefreshRepository;
@@ -17,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -88,6 +90,9 @@ public class SecurityConfig {
         // 커스텀 로그인 필터 등록
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class);
+        // 커스텀 로그아웃 필터 등록
+        http
+                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
         // 서버가 세션을 사용하지 않도록 STATELESS 설정
         http
                 .sessionManagement(session -> session
