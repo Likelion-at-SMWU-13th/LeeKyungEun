@@ -87,4 +87,21 @@ class TransferServiceIntegrationTests {
         verify(accountRepository, never()).changeAmount(anyLong(), any(BigDecimal.class));
     }
 
+    @Test
+    @DisplayName("통합 테스트 예외 플로우: 수취인 계좌가 존재하지 않으면 예외 발생")
+    void transferMoneyReceiverAccountNotFound() {
+        // Given
+        Account sender = new Account(1L, "John", new BigDecimal(1000));
+
+        given(accountRepository.findById(1L)).willReturn(Optional.of(sender));
+        given(accountRepository.findById(999L)).willReturn(Optional.empty());
+
+        // When
+        AccountNotFoundException exception = assertThrows(AccountNotFoundException.class,
+                () -> transferService.transferMoney(1L, 999L, new BigDecimal(100)));
+
+        // Then
+        assertTrue(exception.getMessage().contains("Receiver"));
+        verify(accountRepository, never()).changeAmount(anyLong(), any(BigDecimal.class));
+    }
 }
