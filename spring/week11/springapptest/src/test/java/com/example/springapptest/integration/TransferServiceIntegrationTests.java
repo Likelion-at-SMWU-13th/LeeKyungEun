@@ -1,6 +1,7 @@
 package com.example.springapptest.integration;
 
 import com.example.springapptest.domain.Account;
+import com.example.springapptest.exception.AccountNotFoundException;
 import com.example.springapptest.repository.AccountRepository;
 import com.example.springapptest.service.TransferService;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +13,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.*;
 
 /**
@@ -66,4 +69,22 @@ class TransferServiceIntegrationTests {
      * 이 테스트는 작성하지 않아도 됩니다.
      * 대신 전체 테스트 실행 시간을 비교해보세요!
      */
+
+    /**
+     * 과제
+     */
+    @Test
+    @DisplayName("통합 테스트 예외 플로우: 발신인 계좌가 존재하지 않으면 예외 발생")
+    void transferMoneySenderAccountNotFound() {
+        // Given
+        given(accountRepository.findById(999L)).willReturn(Optional.empty());
+
+        // When
+        assertThrows(AccountNotFoundException.class,
+                () -> transferService.transferMoney(999L, 2L, new BigDecimal(100)));
+
+        // Then
+        verify(accountRepository, never()).changeAmount(anyLong(), any(BigDecimal.class));
+    }
+
 }
