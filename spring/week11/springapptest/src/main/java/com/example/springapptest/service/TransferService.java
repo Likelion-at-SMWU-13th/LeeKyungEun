@@ -2,6 +2,8 @@ package com.example.springapptest.service;
 
 import com.example.springapptest.domain.Account;
 import com.example.springapptest.exception.AccountNotFoundException;
+import com.example.springapptest.exception.InsufficientBalanceException;
+import com.example.springapptest.exception.InvalidAmountException;
 import com.example.springapptest.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,11 +42,21 @@ public class TransferService {
                 .orElseThrow(() -> new AccountNotFoundException(
                         "Receiver account not found with id: " + idReceiver));
 
-        // 3. 새로운 금액 계산
+        // 3. 잔액이 부족하지 않은지 확인
+        if (amount.compareTo(sender.getAmount()) > 0) {
+            throw new InsufficientBalanceException("Insufficient Balance - Amount must be less than sender's amount");
+        }
+
+        // 4. 금액이 양수인지 확인
+        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+            throw new InvalidAmountException("Invalid Amount - Amount must be greater than zero");
+        }
+
+        // 5. 새로운 금액 계산
         BigDecimal senderNewAmount = sender.getAmount().subtract(amount);
         BigDecimal receiverNewAmount = receiver.getAmount().add(amount);
 
-        // 4. 금액 업데이트
+        // 6. 금액 업데이트
         accountRepository.changeAmount(idSender, senderNewAmount);
         accountRepository.changeAmount(idReceiver, receiverNewAmount);
     }
