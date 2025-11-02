@@ -47,7 +47,7 @@ public class TransferService {
             throw new InsufficientBalanceException("Insufficient Balance - Amount must be less than sender's amount");
         }
 
-        // 4. 금액이 양수인지 확인
+        // 4. 금액이 음수가 아닌지 확인
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
             throw new InvalidAmountException("Invalid Amount - Amount must be greater than zero");
         }
