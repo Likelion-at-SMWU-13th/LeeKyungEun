@@ -11,12 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 /**
@@ -32,6 +32,7 @@ import static org.mockito.BDDMockito.*;
  * - @Transactional 등 스프링 기능이 정상 작동하는지 확인
  */
 @SpringBootTest
+@Transactional
 class TransferServiceIntegrationTests {
 
     @MockBean
@@ -143,6 +144,12 @@ class TransferServiceIntegrationTests {
         // Then
         assertTrue(exception.getMessage().contains("Invalid Amount"));
         verify(accountRepository, never()).changeAmount(anyLong(), any(BigDecimal.class));
+
+        Account reloadedSender = accountRepository.findById(1L).orElseThrow();
+        Account reloadedReceiver = accountRepository.findById(2L).orElseThrow();
+
+        assertEquals(new BigDecimal("50"), reloadedSender.getAmount(), "sender 잔액 유지");
+        assertEquals(new BigDecimal("1000"), reloadedReceiver.getAmount(), "receiver 잔액 유지");
     }
 
 }
