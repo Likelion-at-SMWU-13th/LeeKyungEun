@@ -2,6 +2,7 @@ package com.example.springapptest.integration;
 
 import com.example.springapptest.domain.Account;
 import com.example.springapptest.exception.AccountNotFoundException;
+import com.example.springapptest.exception.InsufficientBalanceException;
 import com.example.springapptest.repository.AccountRepository;
 import com.example.springapptest.service.TransferService;
 import org.junit.jupiter.api.DisplayName;
@@ -102,6 +103,25 @@ class TransferServiceIntegrationTests {
 
         // Then
         assertTrue(exception.getMessage().contains("Receiver"));
+        verify(accountRepository, never()).changeAmount(anyLong(), any(BigDecimal.class));
+    }
+
+    @Test
+    @DisplayName("통합 테스트 예외 플로우: 잔액이 부족하면 예외 발생")
+    void transferMoneyInsufficientBalance() {
+        // Given
+        Account sender = new Account(1L, "John", new BigDecimal(50));
+        Account receiver = new Account(2L, "Jane", new BigDecimal(1000));
+
+        given(accountRepository.findById(1L)).willReturn(Optional.of(sender));
+        given(accountRepository.findById(2L)).willReturn(Optional.of(receiver));
+
+        // When
+        InsufficientBalanceException exception = assertThrows(InsufficientBalanceException.class,
+                () -> transferService.transferMoney(1L, 2L, new BigDecimal(100)));
+
+        // Then
+        assertTrue(exception.getMessage().contains("Insufficient Balance"));
         verify(accountRepository, never()).changeAmount(anyLong(), any(BigDecimal.class));
     }
 }
